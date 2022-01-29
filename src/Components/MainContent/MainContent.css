@@ -1,0 +1,6 @@
+.mainContentContainer {
+  display: inline-block;
+  width: 80vw;
+  height: calc(100vh - 140px);
+  float: right;
+}

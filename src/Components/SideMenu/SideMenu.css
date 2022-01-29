@@ -1,0 +1,9 @@
+.sideMenuContainer {
+  display: block;
+  width: 20vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #dfd3c3;
+}

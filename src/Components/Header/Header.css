@@ -1,0 +1,7 @@
+.headerContainer {
+  display: inline-block;
+  width: 80vw;
+  height: 70px;
+  float: right;
+  background-color: #c7b198;
+}
