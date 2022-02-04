@@ -1,6 +1,16 @@
 .mainContentContainer {
   display: inline-block;
   width: 80vw;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 130px);
   float: right;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* background-image:  */
+  /*linear-gradient(
+       45deg,
+      rgba(145, 146, 122, 0.62),
+      rgba(255, 91, 97, 0.58)
+    ), */
+  /* url("../../Static/Images/mainContentBanner.jpg"); */
+  background-color: rgba(100, 100, 100, 0.3);
 }

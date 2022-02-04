@@ -1,0 +1,17 @@
+.pageTitleBannerContainer {
+  display: block;
+  width: 80vw;
+  height: 80px !important;
+  position: relative;
+}
+
+.pageTitleBanner {
+  display: inline-block;
+  width: 80vw;
+  height: 80px;
+  object-fit: cover;
+  float: right;
+  opacity: 0.8;
+  /* filter: blur(1px); */
+  /* filter: grayscale(40%); */
+}

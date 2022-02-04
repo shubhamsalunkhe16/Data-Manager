@@ -2,7 +2,7 @@
   display: inline-block;
   width: 80vw;
   height: 70px;
-  background-color: #115173;
+  background-color: #1b2330;
   position: absolute;
   bottom: 0;
   right: 0;
@@ -11,4 +11,5 @@
 .footerContent {
   text-align: center;
   margin-top: 25px;
+  color: white;
 }

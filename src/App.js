@@ -1,10 +1,18 @@
-import React from "react";
-import Home from "./Pages/Home";
+import * as React from "react";
+import Header from "./Components/Header/Header";
+import SideMenu from "./Components/SideMenu/SideMenu";
+import MainContent from "./Components/MainContent/MainContent";
+import Footer from "./Components/Footer/Footer";
 
-export default function App() {
+function App() {
   return (
     <>
-      <Home />
+      <Header />
+      <SideMenu />
+      <MainContent />
+      <Footer />
     </>
   );
 }
+
+export default App;

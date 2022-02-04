@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,9 +22,15 @@ const Header = (props) => {
   return (
     <div className={classes.headerContainer}>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" sx={{ backgroundColor: "#022C43" }}>
+        <AppBar
+          position="static"
+          sx={{
+            // backgroundImage: "linear-gradient(to right, #fbd786, #f7797d);",
+            backgroundColor: "#1b2330",
+          }}
+        >
           <Toolbar>
-            <Avatar alt="Shubham" src="Images/BrandLogo.jpg" />
+            <Avatar alt="Logo" src="Images/BrandLogo.jpg" />
             <Typography
               variant="h6"
               component="div"
@@ -37,6 +44,10 @@ const Header = (props) => {
       </Box>
     </div>
   );
+};
+
+Header.propTypes = {
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(Header);
