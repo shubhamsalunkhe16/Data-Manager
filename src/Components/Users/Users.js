@@ -7,12 +7,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import "./Users.css";
 import { Fab, Grid, Typography } from "@mui/material";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 
 class EditSaveCancel extends Component {
   constructor() {
@@ -30,6 +36,8 @@ class EditSaveCancel extends Component {
       rememberMe: false,
       updatedData: [],
       activity: 10,
+      open: false,
+      selectedUserID: null,
     };
 
     // In Class function bind Click like below
@@ -73,9 +81,19 @@ class EditSaveCancel extends Component {
       this.props.setRecentlyAddedUser(this.state.data[0]);
     }
   }
-  saveName(userId, index) {
-    var updatedname = document.getElementById("name_" + index).value;
-    var updatedemail = document.getElementById("email_" + index).value;
+  saveName(userId) {
+    var updatedname = document.getElementById("name_" + userId).value;
+    var updatedemail = document.getElementById("email_" + userId).value;
+    console.log("update 1", this.state.updatedData);
+    console.log("data 1", this.state.data);
+    console.log("user id", userId, updatedname, updatedemail);
+
+    const selectedData = this.state.data.filter(
+      (data) => data.userId == userId
+    );
+
+    const selectedIndex = this.state.data.findIndex((x) => x.userId == userId);
+    console.log("55", selectedData, selectedIndex);
 
     if (this.state.action == "add") {
       this.state.data.shift();
@@ -85,10 +103,12 @@ class EditSaveCancel extends Component {
         email: updatedemail,
       });
     } else {
-      this.state.data[userId - 1].fname = updatedname;
-      this.state.data[userId - 1].email = updatedemail;
+      this.state.data[selectedIndex].userId = userId;
+      this.state.data[selectedIndex].fname = updatedname;
+      this.state.data[selectedIndex].email = updatedemail;
     }
-
+    console.log("update 2", this.state.updatedData);
+    console.log("data 2", this.state.data);
     this.setState({
       data: this.state.data.sort((a, b) => this.ascendOrder(a, b)),
       updatedData: this.state.data.sort((a, b) => this.ascendOrder(a, b)),
@@ -96,25 +116,28 @@ class EditSaveCancel extends Component {
       activity: this.state.activity + 1,
     });
 
-    document.getElementById("labelName_" + index).classList.remove("d-none");
-    document.getElementById("labelEmail_" + index).classList.remove("d-none");
-    document.getElementById("editBtn_" + index).classList.remove("d-none");
-    document.getElementById("name_" + index).classList.add("d-none");
-    document.getElementById("email_" + index).classList.add("d-none");
-    document.getElementById("saveBtn_" + index).classList.add("d-none");
-    document.getElementById("cancelBtn_" + index).classList.add("d-none");
+    document.getElementById("labelName_" + userId).classList.remove("d-none");
+    document.getElementById("labelEmail_" + userId).classList.remove("d-none");
+    document.getElementById("editBtn_" + userId).classList.remove("d-none");
+    document.getElementById("delBtn_" + userId).classList.remove("d-none");
+    document.getElementById("name_" + userId).classList.add("d-none");
+    document.getElementById("email_" + userId).classList.add("d-none");
+    document.getElementById("saveBtn_" + userId).classList.add("d-none");
+    document.getElementById("cancelBtn_" + userId).classList.add("d-none");
 
-    if (
-      document.getElementById("name_" + index).value == "" &&
-      document.getElementById("email_" + index).value == ""
-    ) {
-      this.state.data.splice(index, 1);
-      var newName = this.state.data.sort((a, b) => this.ascendOrder(a, b));
-      this.setState({
-        data: newName,
-        updated: newName,
-      });
-    }
+    // if (
+    //   document.getElementById("name_" + index).value == "" &&
+    //   document.getElementById("email_" + index).value == ""
+    // ) {
+    //   this.state.data.splice(index, 1);
+    //   var newName = this.state.data.sort((a, b) => this.ascendOrder(a, b));
+    //   this.setState({
+    //     data: newName,
+    //     updated: newName,
+    //   });
+    //   console.log("update 3", this.state.updatedData);
+    //   console.log("data 3", this.state.data);
+    // }
 
     var editClassName = document.getElementsByClassName("editBtn");
     var deleteClassName = document.getElementsByClassName("delBtn");
@@ -125,7 +148,7 @@ class EditSaveCancel extends Component {
       deleteClassName[i].style.opacity = "1";
     }
 
-    this.setDataInLocalStorage(); // Save data in local storage
+    this.setDataInLocalStorage();
   }
   setDataInLocalStorage = () => {
     // This call under save
@@ -148,24 +171,34 @@ class EditSaveCancel extends Component {
       activity: activitySetItem,
     });
   };
-  editName(name, index) {
+  editName(userId) {
     this.setState({ action: "edit" });
 
-    this.setState({ editContent: name }); // Update state here
+    // this.setState({ editContent: "abc" }); // Update state here
 
-    document.getElementById("labelName_" + index).classList.add("d-none");
-    document.getElementById("labelEmail_" + index).classList.add("d-none");
-    document.getElementById("editBtn_" + index).classList.add("d-none");
-    document.getElementById("delBtn_" + index).classList.add("d-none");
-    document.getElementById("name_" + index).classList.remove("d-none");
-    document.getElementById("email_" + index).classList.remove("d-none");
-    document.getElementById("saveBtn_" + index).classList.remove("d-none");
-    document.getElementById("cancelBtn_" + index).classList.remove("d-none");
+    document.getElementById("labelName_" + userId).classList.add("d-none");
+    document.getElementById("labelEmail_" + userId).classList.add("d-none");
+    document.getElementById("editBtn_" + userId).classList.add("d-none");
+    document.getElementById("delBtn_" + userId).classList.add("d-none");
+    document.getElementById("name_" + userId).classList.remove("d-none");
+    document.getElementById("email_" + userId).classList.remove("d-none");
+    document.getElementById("saveBtn_" + userId).classList.remove("d-none");
+    document.getElementById("cancelBtn_" + userId).classList.remove("d-none");
+
+    document.getElementById("name_" + userId).value = document.getElementById(
+      "labelName_" + userId
+    ).innerText;
+    document.getElementById("email_" + userId).value = document.getElementById(
+      "labelEmail_" + userId
+    ).innerText;
 
     var editclassName = document.getElementsByClassName("editBtn");
     var delclassName = document.getElementsByClassName("delBtn ");
+
     for (var i = 0; i < editclassName.length; i++) {
-      if (i != index) {
+      var ids = editclassName[i].id.substring(8);
+
+      if (ids != userId) {
         editclassName[i].style.pointerEvents = "none";
         editclassName[i].style.opacity = "0.5";
         delclassName[i].style.pointerEvents = "none";
@@ -173,22 +206,23 @@ class EditSaveCancel extends Component {
       }
     }
   }
-  cancelName(index) {
-    document.getElementById("labelName_" + index).classList.remove("d-none");
-    document.getElementById("labelEmail_" + index).classList.remove("d-none");
-    document.getElementById("editBtn_" + index).classList.remove("d-none");
-    document.getElementById("delBtn_" + index).classList.remove("d-none");
-    document.getElementById("name_" + index).classList.add("d-none");
-    document.getElementById("email_" + index).classList.add("d-none");
-    document.getElementById("saveBtn_" + index).classList.add("d-none");
-    document.getElementById("cancelBtn_" + index).classList.add("d-none");
+  cancelName(userId) {
+    document.getElementById("labelName_" + userId).classList.remove("d-none");
+    document.getElementById("labelEmail_" + userId).classList.remove("d-none");
+    document.getElementById("editBtn_" + userId).classList.remove("d-none");
+    document.getElementById("delBtn_" + userId).classList.remove("d-none");
+    document.getElementById("name_" + userId).classList.add("d-none");
+    document.getElementById("email_" + userId).classList.add("d-none");
+    document.getElementById("saveBtn_" + userId).classList.add("d-none");
+    document.getElementById("cancelBtn_" + userId).classList.add("d-none");
 
     console.log("actionnn", this.state.action);
 
     var editclassName = document.getElementsByClassName("editBtn");
     var delclassName = document.getElementsByClassName("delBtn ");
     for (var i = 0; i < editclassName.length; i++) {
-      if (i != index) {
+      var ids = editclassName[i].id.substring(8);
+      if (ids != userId) {
         editclassName[i].style.pointerEvents = "auto";
         editclassName[i].style.opacity = "1";
         delclassName[i].style.pointerEvents = "auto";
@@ -200,13 +234,11 @@ class EditSaveCancel extends Component {
     const lastItem = lastName[lastName.length - 1]; // last item not in array if not saved "https://flaviocopes.com/how-to-get-last-item-array-javascript/"
 
     if (
-      document.getElementById("name_" + index).value == "" ||
+      document.getElementById("name_" + userId).value == "" ||
       lastItem == "" ||
-      document.getElementById("email_" + index).value == "" ||
+      document.getElementById("email_" + userId).value == "" ||
       lastItem == ""
     ) {
-      console.log("actionnn", this.state.data);
-      // this.state.data.splice(index, 1);
       this.state.data.pop();
       var newName = this.state.data.sort((a, b) => this.ascendOrder(a, b));
       this.setState({
@@ -215,9 +247,12 @@ class EditSaveCancel extends Component {
       });
     }
   }
-  deleteRow = (i) => {
-    this.state.data.splice(i, 1);
-    var newName = this.state.data.sort((a, b) => this.ascendOrder(a, b));
+  deleteRow = (userId) => {
+    var afterDelete = this.state.data.filter((data) => data.userId != userId);
+
+    var newName = afterDelete.sort((a, b) => this.ascendOrder(a, b));
+    console.log("1", newName, afterDelete);
+
     this.setState({
       data: newName,
       updatedData: newName,
@@ -228,26 +263,22 @@ class EditSaveCancel extends Component {
       className[i].style.opacity = "1";
     }
 
-    /* let items =JSON.parse(localStorage.getItem("users"));
-        items = items.filter((item) => item.i !== i);
-        localStorage.setItem("users", JSON.stringify(items));
-        if (items.length === 0) {
-            localStorage.removeItem("users");
-        } */
-    localStorage.setItem("users", JSON.stringify(this.state.data));
+    localStorage.setItem("users", JSON.stringify(afterDelete));
     localStorage.setItem("activity", JSON.stringify(this.state.activity + 1));
 
     this.setState({
-      data: this.state.data.sort((a, b) => this.ascendOrder(a, b)),
-      updatedData: this.state.data.sort((a, b) => this.ascendOrder(a, b)),
+      data: newName,
+      updatedData: newName,
       activity: this.state.activity + 1,
     });
   };
   addRow() {
     this.setState({ action: "add" });
     var rows = this.state.data.sort((a, b) => this.ascendOrder(a, b));
+    var newIdToGenrate = this.state.data[this.state.data.length - 1].userId + 1;
+
     // rows.push({ fname: "", email: "" });
-    rows.unshift({ userId: this.state.data.length + 1, fname: "", email: "" });
+    rows.unshift({ userId: newIdToGenrate, fname: "", email: "" });
     this.setState({ data: rows, updatedData: rows });
 
     // var lastRow = rows.length - 1;
@@ -255,36 +286,69 @@ class EditSaveCancel extends Component {
     setTimeout(function () {
       //   var index = lastRow;
       var index = 0;
-      document.getElementById("labelName_" + index).classList.add("d-none");
-      document.getElementById("labelEmail_" + index).classList.add("d-none");
-      document.getElementById("editBtn_" + index).classList.add("d-none");
-      document.getElementById("delBtn_" + index).classList.add("d-none");
-      document.getElementById("name_" + index).classList.remove("d-none");
-      document.getElementById("name_" + index).focus();
-      document.getElementById("email_" + index).classList.remove("d-none");
-      document.getElementById("saveBtn_" + index).classList.remove("d-none");
-      document.getElementById("cancelBtn_" + index).classList.remove("d-none");
+      document
+        .getElementById("labelName_" + newIdToGenrate)
+        ?.classList.add("d-none");
+      document
+        .getElementById("labelEmail_" + newIdToGenrate)
+        ?.classList.add("d-none");
+      document
+        .getElementById("editBtn_" + newIdToGenrate)
+        ?.classList.add("d-none");
+      document
+        .getElementById("delBtn_" + newIdToGenrate)
+        ?.classList.add("d-none");
+      document
+        .getElementById("name_" + newIdToGenrate)
+        ?.classList.remove("d-none");
+      document.getElementById("name_" + newIdToGenrate)?.focus();
+      document
+        .getElementById("email_" + newIdToGenrate)
+        ?.classList.remove("d-none");
+      document
+        .getElementById("saveBtn_" + newIdToGenrate)
+        ?.classList.remove("d-none");
+      document
+        .getElementById("cancelBtn_" + newIdToGenrate)
+        ?.classList.remove("d-none");
 
-      document.getElementById("name_" + index).value = "";
-      document.getElementById("email_" + index).value = "";
+      document.getElementById("name_" + index) &&
+        (document.getElementById("name_" + index).value = "");
+      document.getElementById("email_" + index) &&
+        (document.getElementById("email_" + index).value = "");
 
-      var className = document.getElementsByClassName("editBtn");
-      for (var i = 0; i < className.length; i++) {
+      // var className = document.getElementsByClassName("editBtn");
+      // if (className.length != 0)
+      //   for (var i = 0; i < className.length; i++) {
+      //     if (i != index) {
+      //       className[i].style.pointerEvents = "none";
+      //       className[i].style.opacity = "0.5";
+      //     }
+      //   }
+
+      var editclassName = document.getElementsByClassName("editBtn");
+      var delclassName = document.getElementsByClassName("delBtn ");
+
+      for (var i = 0; i < editclassName.length; i++) {
         if (i != index) {
-          className[i].style.pointerEvents = "none";
-          className[i].style.opacity = "0.5";
+          editclassName[i].style.pointerEvents = "none";
+          editclassName[i].style.opacity = "0.5";
+          delclassName[i].style.pointerEvents = "none";
+          delclassName[i].style.opacity = "0.5";
         }
       }
     }, 500);
   }
   // Ascending Order
-  sortByAscending(filterBy) {
+  sortByAscending() {
     const ascend = this.state.data.sort((a, b) => this.ascendOrder(a, b));
     this.setState({
       data: ascend,
       updatedData: ascend,
       order: "ascending",
     });
+    console.log("aes", this.state.data);
+    console.log("aes", this.state.updatedData);
   }
   ascendOrder(a, b) {
     if (a.userId < b.userId) {
@@ -303,7 +367,6 @@ class EditSaveCancel extends Component {
       updatedData: descend,
       order: "descending",
     });
-    console.log("des", this.state.data);
   }
   descendOrder(a, b) {
     if (b.userId < a.userId) {
@@ -322,6 +385,14 @@ class EditSaveCancel extends Component {
     });
     this.setState({ updatedData: updatedData });
   }
+
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
 
   render() {
     return (
@@ -347,19 +418,23 @@ class EditSaveCancel extends Component {
               }}
             >
               <Grid item xs={6} md={8}>
-                <input
+                <TextField
                   type="text"
                   className="search name input-name form-control"
                   value={this.state.searchContent}
                   id="search"
                   name="search"
+                  autoComplete="off"
                   placeholder="Filter by Full Name..."
+                  // label="Filter by Full Name..."
                   onChange={(e) => this.filterByFullName(e)}
-                  style={{
-                    display: "inline-block",
+                  sx={{
                     width: "50%",
                     float: "left",
+                    backgroundColor: "white",
+                    borderRadius: "5px",
                   }}
+                  type="search"
                 />
               </Grid>
               <Grid item xs={6} md={4}>
@@ -370,6 +445,7 @@ class EditSaveCancel extends Component {
                   variant="contained"
                   startIcon={<AddIcon />}
                   color="secondary"
+                  size="large"
                 >
                   Add
                 </Button>
@@ -378,43 +454,12 @@ class EditSaveCancel extends Component {
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead sx={{ backgroundColor: "#1b2330" }}>
-                  <TableRow>
+                  <TableRow sx={{ height: "60px" }}>
                     <TableCell
                       sx={{ color: "white", fontSize: "16px" }}
                       align="center"
                     >
                       User ID &nbsp;
-                      <Fab
-                        size="small"
-                        color="secondary"
-                        aria-label="ascending"
-                        sx={{
-                          minHeight: "25px",
-                          height: "25px",
-                          width: "25px",
-                        }}
-                        onClick={() => {
-                          this.sortByAscending();
-                        }}
-                      >
-                        <ArrowUpwardRoundedIcon fontSize="small" />
-                      </Fab>
-                      &nbsp;
-                      <Fab
-                        size="small"
-                        color="secondary"
-                        aria-label="descending"
-                        sx={{
-                          minHeight: "25px",
-                          height: "25px",
-                          width: "25px",
-                        }}
-                        onClick={() => {
-                          this.sortByDescending();
-                        }}
-                      >
-                        <ArrowDownwardRoundedIcon fontSize="small" />
-                      </Fab>
                     </TableCell>
                     <TableCell
                       sx={{ color: "white", fontSize: "16px" }}
@@ -444,6 +489,7 @@ class EditSaveCancel extends Component {
                         className="contact"
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
+                          height: "60px",
                         }}
                       >
                         <TableCell component="th" scope="row" align="center">
@@ -451,54 +497,68 @@ class EditSaveCancel extends Component {
                         </TableCell>
                         <TableCell align="center">
                           {" "}
-                          <span id={`labelName_${i}`} className="label">
+                          <span
+                            id={`labelName_${val.userId}`}
+                            className="label"
+                          >
                             {val.fname}
                           </span>
                           <input
                             type="text"
                             className="d-none name input-name form-control"
                             value={this.state.editContent.fname}
-                            id={`name_${i}`}
-                            name={`name_${i}`}
+                            id={`name_${val.userId}`}
+                            name={`name_${val.userId}`}
                             onChange={(e) =>
                               this.setState({ editContent: e.target.value })
                             }
                             style={{
                               display: "inline-block",
-                              width: "90%",
-                              float: "left",
+                              width: "70%",
+                              float: "center",
+                              padding: "5px",
+                              textAlign: "center",
+                              borderRadius: "5px",
+                              border: "1px solid black",
                             }}
                           />
                         </TableCell>
                         <TableCell align="center">
-                          <span id={`labelEmail_${i}`} className="label">
+                          <span
+                            id={`labelEmail_${val.userId}`}
+                            className="label"
+                          >
                             {val.email}
                           </span>
                           <input
                             type="text"
                             className="d-none email input-email form-control"
                             value={this.state.editContent.email}
-                            id={`email_${i}`}
-                            name={`email_${i}`}
+                            id={`email_${val.userId}`}
+                            name={`email_${val.userId}`}
                             onChange={(e) =>
                               this.setState({ editContent: e.target.value })
                             }
                             style={{
                               display: "inline-block",
-                              width: "90%",
-                              float: "left",
+                              width: "70%",
+                              float: "center",
+                              padding: "5px",
+                              textAlign: "center",
+                              borderRadius: "5px",
+                              border: "1px solid black",
                             }}
                           />
                         </TableCell>
                         <TableCell align="center">
                           <Button
                             onClick={() => {
-                              this.editName(val, i);
+                              this.editName(val.userId);
                             }}
                             variant="contained"
                             color="primary"
                             className="btn btn-primary editBtn"
-                            id={`editBtn_${i}`}
+                            id={`editBtn_${val.userId}`}
                           >
                             Edit
                           </Button>
@@ -507,10 +567,10 @@ class EditSaveCancel extends Component {
                             variant="contained"
                             color="success"
                             onClick={() => {
-                              this.saveName(val.userId, i);
+                              this.saveName(val.userId);
                             }}
                             className="btn btn-primary d-none saveBtn"
-                            id={`saveBtn_${i}`}
+                            id={`saveBtn_${val.userId}`}
                           >
                             Save
                           </Button>
@@ -519,22 +579,86 @@ class EditSaveCancel extends Component {
                             variant="contained"
                             color="error"
                             onClick={() => {
-                              this.deleteRow(i);
+                              this.handleClickOpen();
+                              // this.deleteRow(val);
+                              this.setState({ selectedUserID: val.userId });
                             }}
                             className="btn btn-primary delBtn"
-                            id={`delBtn_${i}`}
+                            id={`delBtn_${val.userId}`}
                           >
                             Delete
                           </Button>
+                          <Dialog
+                            open={this.state.open}
+                            onClose={() => this.handleClose()}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            <DialogTitle id="alert-dialog-title">
+                              <Typography
+                                // textAlign="center"
+                                variant="h4"
+                                component="h4"
+                              >
+                                <InfoRoundedIcon
+                                  sx={{
+                                    fontSize: "50px",
+                                    color: "orange",
+                                    mr: "10px",
+                                    position: "relative",
+                                    top: "15px",
+                                  }}
+                                />
+                                Please Confirm
+                              </Typography>
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                <Typography
+                                  textAlign="center"
+                                  variant="h6"
+                                  component="h6"
+                                  fontWeight="normal"
+                                >
+                                  Are you sure you want Delete record?
+                                </Typography>
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions
+                              sx={{
+                                mb: "15px !important",
+                                mr: "15px !important",
+                              }}
+                            >
+                              <Button
+                                color="error"
+                                variant="contained"
+                                onClick={() => {
+                                  this.deleteRow(this.state.selectedUserID);
+                                  this.handleClose();
+                                }}
+                              >
+                                Delete
+                              </Button>
+                              <Button
+                                color="info"
+                                variant="contained"
+                                onClick={() => this.handleClose()}
+                                autoFocus
+                              >
+                                Cancel
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
                           &nbsp;
                           <Button
                             variant="contained"
                             color="warning"
                             onClick={() => {
-                              this.cancelName(i);
+                              this.cancelName(val.userId);
                             }}
                             className="btn btn-primary d-none cancelBtn"
-                            id={`cancelBtn_${i}`}
+                            id={`cancelBtn_${val.userId}`}
                           >
                             Cancel
                           </Button>
@@ -543,16 +667,18 @@ class EditSaveCancel extends Component {
                     ))}
                   {this.state.updatedData.length == 0 && (
                     <TableRow>
-                      <Typography
-                        align="right"
-                        position="relative"
-                        left="235px"
-                        variant="h6"
-                        gutterBottom
-                        component="h6"
-                      >
-                        No Results Found
-                      </Typography>
+                      <TableCell>
+                        <Typography
+                          align="right"
+                          position="relative"
+                          left="235px"
+                          variant="h6"
+                          gutterBottom
+                          component="h6"
+                        >
+                          No Results Found
+                        </Typography>
+                      </TableCell>
                     </TableRow>
                   )}
                 </TableBody>

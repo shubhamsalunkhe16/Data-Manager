@@ -16,9 +16,22 @@ import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import "./UserForm.css";
 
+var intialState = {
+  firstName: "",
+  lastName: "",
+  birthDate: "",
+  gender: "",
+  email: "",
+  phoneNumber: "",
+  designation: "",
+};
+
 const UserForm = () => {
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(new Date("2014-08-18T21:11:54"));
+  // const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
+  const [value, setValue] = useState(null);
   const [desgination, setDesgination] = useState(null);
+  const [data, setData] = useState({ intialState });
   return (
     <form>
       <Paper
@@ -38,6 +51,11 @@ const UserForm = () => {
               name="firstName"
               label="First Name"
               variant="outlined"
+              // {value==""?error:null}
+              error
+              helperText="Incorrect entry."
+              // onChange={(e) => {}}
+              // value={intialState.firstName}
             />
           </Grid>
           <Grid item xs={5}>
@@ -50,7 +68,7 @@ const UserForm = () => {
             />
           </Grid>
           <Grid item xs={5} className="datePickerContainer">
-            <LocalizationProvider
+            {/* <LocalizationProvider
               dateAdapter={AdapterDateFns}
               className="inputBox"
             >
@@ -62,6 +80,19 @@ const UserForm = () => {
                 value={date}
                 onChange={(e) => {
                   setDate(e.target);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider> */}
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              className="inputBox"
+            >
+              <DatePicker
+                label="Basic example"
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
                 }}
                 renderInput={(params) => <TextField {...params} />}
               />
@@ -109,9 +140,9 @@ const UserForm = () => {
             <TextField
               className="inputBox"
               id="phoneNumber"
+              name="phoneNumber"
               label="Phone Number"
               variant="outlined"
-              name="phoneNumber"
               type="number"
             />
           </Grid>
