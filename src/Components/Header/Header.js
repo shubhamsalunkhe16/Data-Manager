@@ -25,7 +25,6 @@ const Header = (props) => {
         <AppBar
           position="static"
           sx={{
-            // backgroundImage: "linear-gradient(to right, #fbd786, #f7797d);",
             backgroundColor: "#1b2330",
           }}
         >

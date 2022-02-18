@@ -15,9 +15,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import "./Users.css";
-import { Fab, Grid, Typography } from "@mui/material";
-import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
-import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
+import { Grid, Typography } from "@mui/material";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 
 class EditSaveCancel extends Component {
@@ -39,16 +37,6 @@ class EditSaveCancel extends Component {
       open: false,
       selectedUserID: null,
     };
-
-    // In Class function bind Click like below
-    //01 Use bind method without fat arrow function ()=>
-    //02 this.sortByAscending = this.sortByAscending.bind(this);
-    //03 this.sortByDescending = this.sortByDescending.bind(this);
-    //04 onClick={this.sortByAscending()}
-
-    // In Class function direct add Click on button like below with bind here
-    //01 Use bind method with fat arrow function ()=>
-    //02 onClick={()=>this.sortByAscending()}
   }
 
   componentDidMount() {
@@ -62,18 +50,16 @@ class EditSaveCancel extends Component {
     }
   }
   componentDidUpdate() {
-    let dataDidMount = this.state.data
-      //   .sort((a, b) => this.ascendOrder(a, b))
-      .map((data) => {
-        return data.fname;
-      });
+    this.state.data.map((data) => {
+      return data.fname;
+    });
     this.props.setUsersCount(this.state.data.length);
     this.props.setActivity(this.state.activity);
     localStorage.setItem("activity", this.state.activity);
-    var latestData = this.state.data.filter((data) => {
-      return data.userId == this.state.data.length;
+    this.state.data.filter((data) => {
+      return data.userId === this.state.data.length;
     });
-    if (this.state.order == "ascending") {
+    if (this.state.order === "ascending") {
       this.props.setRecentlyAddedUser(
         this.state.data[this.state.data.length - 1]
       );
@@ -85,20 +71,20 @@ class EditSaveCancel extends Component {
     var updatedname = document.getElementById("name_" + userId).value;
     var updatedemail = document.getElementById("email_" + userId).value;
 
-    if (updatedname == "" && updatedemail == "") {
+    if (updatedname === "" && updatedemail === "") {
       alert("Please Enter Name and Email");
       return;
-    } else if (updatedname == "") {
+    } else if (updatedname === "") {
       alert("Please Enter Name");
       return;
-    } else if (updatedemail == "") {
+    } else if (updatedemail === "") {
       alert("Please Enter Email");
       return;
     }
 
-    const selectedIndex = this.state.data.findIndex((x) => x.userId == userId);
+    const selectedIndex = this.state.data.findIndex((x) => x.userId === userId);
 
-    if (this.state.action == "add") {
+    if (this.state.action === "add") {
       this.state.data.shift();
       this.state.data.push({
         userId: userId,
@@ -139,16 +125,14 @@ class EditSaveCancel extends Component {
     this.setDataInLocalStorage();
   }
   setDataInLocalStorage = () => {
-    // This call under save
     localStorage.setItem("users", JSON.stringify(this.state.data));
-    // localStorage.setItem("activity", JSON.stringify(this.state.activity));
+
     this.setState({
       data: this.state.data.sort((a, b) => this.ascendOrder(a, b)),
       updatedData: this.state.data.sort((a, b) => this.ascendOrder(a, b)),
     });
   };
   getDataFromLocalStorage = () => {
-    // This call under componentDidMount
     let usersGetItem = localStorage.getItem("users");
     let usersSetItem = JSON.parse(usersGetItem);
     let activityGetItem = localStorage.getItem("activity");
@@ -161,9 +145,6 @@ class EditSaveCancel extends Component {
   };
   editName(userId) {
     this.setState({ action: "edit" });
-
-    // this.setState({ editContent: "abc" }); // Update state here
-
     document.getElementById("labelName_" + userId).classList.add("d-none");
     document.getElementById("labelEmail_" + userId).classList.add("d-none");
     document.getElementById("editBtn_" + userId).classList.add("d-none");
@@ -186,7 +167,7 @@ class EditSaveCancel extends Component {
     for (var i = 0; i < editclassName.length; i++) {
       var ids = editclassName[i].id.substring(8);
 
-      if (ids != userId) {
+      if (ids !== userId) {
         editclassName[i].style.pointerEvents = "none";
         editclassName[i].style.opacity = "0.5";
         delclassName[i].style.pointerEvents = "none";
@@ -208,7 +189,7 @@ class EditSaveCancel extends Component {
     var delclassName = document.getElementsByClassName("delBtn ");
     for (var i = 0; i < editclassName.length; i++) {
       var ids = editclassName[i].id.substring(8);
-      if (ids != userId) {
+      if (ids !== userId) {
         editclassName[i].style.pointerEvents = "auto";
         editclassName[i].style.opacity = "1";
         delclassName[i].style.pointerEvents = "auto";
@@ -217,14 +198,14 @@ class EditSaveCancel extends Component {
     }
 
     const lastName = this.state.data.sort((a, b) => this.ascendOrder(a, b));
-    const lastItem = lastName[lastName.length - 1]; // last item not in array if not saved "https://flaviocopes.com/how-to-get-last-item-array-javascript/"
+    const lastItem = lastName[lastName.length - 1];
 
     if (
-      document.getElementById("name_" + userId).value == "" ||
-      lastItem == "" ||
-      document.getElementById("email_" + userId).value == "" ||
-      lastItem == "" ||
-      this.state.action == "add"
+      document.getElementById("name_" + userId).value === "" ||
+      lastItem === "" ||
+      document.getElementById("email_" + userId).value === "" ||
+      lastItem === "" ||
+      this.state.action === "add"
     ) {
       this.state.data.pop();
       var newName = this.state.data.sort((a, b) => this.ascendOrder(a, b));
@@ -235,7 +216,7 @@ class EditSaveCancel extends Component {
     }
   }
   deleteRow = (userId) => {
-    var afterDelete = this.state.data.filter((data) => data.userId != userId);
+    var afterDelete = this.state.data.filter((data) => data.userId !== userId);
 
     var newName = afterDelete.sort((a, b) => this.ascendOrder(a, b));
 
@@ -263,14 +244,10 @@ class EditSaveCancel extends Component {
     var rows = this.state.data.sort((a, b) => this.ascendOrder(a, b));
     var newIdToGenrate = this.state.data[this.state.data.length - 1].userId + 1;
 
-    // rows.push({ fname: "", email: "" });
     rows.unshift({ userId: newIdToGenrate, fname: "", email: "" });
     this.setState({ data: rows, updatedData: rows });
 
-    // var lastRow = rows.length - 1;
-
     setTimeout(function () {
-      //   var index = lastRow;
       var index = 0;
       document
         .getElementById("labelName_" + newIdToGenrate)
@@ -303,20 +280,11 @@ class EditSaveCancel extends Component {
       document.getElementById("email_" + index) &&
         (document.getElementById("email_" + index).value = "");
 
-      // var className = document.getElementsByClassName("editBtn");
-      // if (className.length != 0)
-      //   for (var i = 0; i < className.length; i++) {
-      //     if (i != index) {
-      //       className[i].style.pointerEvents = "none";
-      //       className[i].style.opacity = "0.5";
-      //     }
-      //   }
-
       var editclassName = document.getElementsByClassName("editBtn");
       var delclassName = document.getElementsByClassName("delBtn ");
 
       for (var i = 0; i < editclassName.length; i++) {
-        if (i != index) {
+        if (i !== index) {
           editclassName[i].style.pointerEvents = "none";
           editclassName[i].style.opacity = "0.5";
           delclassName[i].style.pointerEvents = "none";
@@ -325,7 +293,7 @@ class EditSaveCancel extends Component {
       }
     }, 500);
   }
-  // Ascending Order
+
   sortByAscending() {
     const ascend = this.state.data.sort((a, b) => this.ascendOrder(a, b));
     this.setState({
@@ -343,7 +311,7 @@ class EditSaveCancel extends Component {
     }
     return 0;
   }
-  // Descending Order
+
   sortByDescending() {
     const descend = this.state.data.sort((a, b) => this.descendOrder(a, b));
     this.setState({
@@ -403,14 +371,12 @@ class EditSaveCancel extends Component {
             >
               <Grid item xs={6} md={8}>
                 <TextField
-                  type="text"
                   className="search name input-name form-control"
                   value={this.state.searchContent}
                   id="search"
                   name="search"
                   autoComplete="off"
                   placeholder="Filter by Full Name..."
-                  // label="Filter by Full Name..."
                   onChange={(e) => this.filterByFullName(e)}
                   sx={{
                     width: "50%",
@@ -437,12 +403,9 @@ class EditSaveCancel extends Component {
             </Grid>
             <TableContainer
               component={Paper}
-              sx={{ minWidth: 650, height: 350 }}
+              sx={{ minWidth: 650, height: 325 }}
             >
-              <Table
-                // sx={{ minWidth: 650, height: 200 }}
-                aria-label="simple table"
-              >
+              <Table aria-label="simple table">
                 <TableHead sx={{ backgroundColor: "#1b2330" }}>
                   <TableRow sx={{ height: "60px" }}>
                     <TableCell
@@ -472,7 +435,7 @@ class EditSaveCancel extends Component {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {this.state.updatedData.length != 0 &&
+                  {this.state.updatedData.length !== 0 &&
                     this.state.updatedData.map((val, i) => (
                       <TableRow
                         key={val.email}
@@ -570,7 +533,6 @@ class EditSaveCancel extends Component {
                             color="error"
                             onClick={() => {
                               this.handleClickOpen();
-                              // this.deleteRow(val);
                               this.setState({ selectedUserID: val.userId });
                             }}
                             className="btn btn-primary delBtn"
@@ -585,11 +547,7 @@ class EditSaveCancel extends Component {
                             aria-describedby="alert-dialog-description"
                           >
                             <DialogTitle id="alert-dialog-title">
-                              <Typography
-                                // textAlign="center"
-                                variant="h4"
-                                component="h4"
-                              >
+                              <Typography variant="h4" component="h4">
                                 <InfoRoundedIcon
                                   sx={{
                                     fontSize: "50px",
@@ -655,7 +613,7 @@ class EditSaveCancel extends Component {
                         </TableCell>
                       </TableRow>
                     ))}
-                  {this.state.updatedData.length == 0 && (
+                  {this.state.updatedData.length === 0 && (
                     <TableRow>
                       <TableCell>
                         <Typography

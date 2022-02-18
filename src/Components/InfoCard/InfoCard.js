@@ -18,8 +18,7 @@ const Info = (props) => {
         position="relative"
         bottom="75px"
         textAlign="center"
-        // color="white"
-        fontWeight="500" //"#ff5b61"
+        fontWeight="500"
       >
         {title}
       </Typography>
@@ -32,7 +31,6 @@ const Info = (props) => {
         textAlign="center"
         fontWeight="400"
         fontSize="1.2rem"
-        // color="white"
       >
         {description}
       </Typography>

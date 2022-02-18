@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-
 import "./DashBoard.css";
 import { withStyles } from "@mui/styles";
-import UserForm from "../../Components/UserForm/UserForm";
-
-import { Typography, Grid } from "@mui/material";
+import Users from "../../Components/Users/Users";
+import { Grid } from "@mui/material";
 import DataCard from "../../Components/DataCard/DataCard";
-import AddIcon from "@mui/icons-material/Add";
-
+import PersonIcon from "@mui/icons-material/Person";
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
 import LocalActivityRoundedIcon from "@mui/icons-material/LocalActivityRounded";
 

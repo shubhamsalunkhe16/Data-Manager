@@ -147,12 +147,7 @@ const UserForm = () => {
             </FormControl>
           </Grid>
           <Grid item xs={5} justifyContent="center">
-            <Button
-              type="Reset"
-              variant="contained"
-              // sx={{ display: "block", textAlign: "center" }}
-              fullWidth
-            >
+            <Button type="Reset" variant="contained" fullWidth>
               Reset
             </Button>
           </Grid>
@@ -161,7 +156,6 @@ const UserForm = () => {
               type="Submit"
               variant="contained"
               color="secondary"
-              // sx={{ display: "block", textAlign: "center" }}
               fullWidth
             >
               Submit
