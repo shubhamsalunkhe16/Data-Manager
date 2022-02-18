@@ -84,16 +84,19 @@ class EditSaveCancel extends Component {
   saveName(userId) {
     var updatedname = document.getElementById("name_" + userId).value;
     var updatedemail = document.getElementById("email_" + userId).value;
-    console.log("update 1", this.state.updatedData);
-    console.log("data 1", this.state.data);
-    console.log("user id", userId, updatedname, updatedemail);
 
-    const selectedData = this.state.data.filter(
-      (data) => data.userId == userId
-    );
+    if (updatedname == "" && updatedemail == "") {
+      alert("Please Enter Name and Email");
+      return;
+    } else if (updatedname == "") {
+      alert("Please Enter Name");
+      return;
+    } else if (updatedemail == "") {
+      alert("Please Enter Email");
+      return;
+    }
 
     const selectedIndex = this.state.data.findIndex((x) => x.userId == userId);
-    console.log("55", selectedData, selectedIndex);
 
     if (this.state.action == "add") {
       this.state.data.shift();
@@ -107,8 +110,7 @@ class EditSaveCancel extends Component {
       this.state.data[selectedIndex].fname = updatedname;
       this.state.data[selectedIndex].email = updatedemail;
     }
-    console.log("update 2", this.state.updatedData);
-    console.log("data 2", this.state.data);
+
     this.setState({
       data: this.state.data.sort((a, b) => this.ascendOrder(a, b)),
       updatedData: this.state.data.sort((a, b) => this.ascendOrder(a, b)),
@@ -124,20 +126,6 @@ class EditSaveCancel extends Component {
     document.getElementById("email_" + userId).classList.add("d-none");
     document.getElementById("saveBtn_" + userId).classList.add("d-none");
     document.getElementById("cancelBtn_" + userId).classList.add("d-none");
-
-    // if (
-    //   document.getElementById("name_" + index).value == "" &&
-    //   document.getElementById("email_" + index).value == ""
-    // ) {
-    //   this.state.data.splice(index, 1);
-    //   var newName = this.state.data.sort((a, b) => this.ascendOrder(a, b));
-    //   this.setState({
-    //     data: newName,
-    //     updated: newName,
-    //   });
-    //   console.log("update 3", this.state.updatedData);
-    //   console.log("data 3", this.state.data);
-    // }
 
     var editClassName = document.getElementsByClassName("editBtn");
     var deleteClassName = document.getElementsByClassName("delBtn");
@@ -216,8 +204,6 @@ class EditSaveCancel extends Component {
     document.getElementById("saveBtn_" + userId).classList.add("d-none");
     document.getElementById("cancelBtn_" + userId).classList.add("d-none");
 
-    console.log("actionnn", this.state.action);
-
     var editclassName = document.getElementsByClassName("editBtn");
     var delclassName = document.getElementsByClassName("delBtn ");
     for (var i = 0; i < editclassName.length; i++) {
@@ -237,7 +223,8 @@ class EditSaveCancel extends Component {
       document.getElementById("name_" + userId).value == "" ||
       lastItem == "" ||
       document.getElementById("email_" + userId).value == "" ||
-      lastItem == ""
+      lastItem == "" ||
+      this.state.action == "add"
     ) {
       this.state.data.pop();
       var newName = this.state.data.sort((a, b) => this.ascendOrder(a, b));
@@ -251,7 +238,6 @@ class EditSaveCancel extends Component {
     var afterDelete = this.state.data.filter((data) => data.userId != userId);
 
     var newName = afterDelete.sort((a, b) => this.ascendOrder(a, b));
-    console.log("1", newName, afterDelete);
 
     this.setState({
       data: newName,
@@ -347,8 +333,6 @@ class EditSaveCancel extends Component {
       updatedData: ascend,
       order: "ascending",
     });
-    console.log("aes", this.state.data);
-    console.log("aes", this.state.updatedData);
   }
   ascendOrder(a, b) {
     if (a.userId < b.userId) {
@@ -451,8 +435,14 @@ class EditSaveCancel extends Component {
                 </Button>
               </Grid>
             </Grid>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableContainer
+              component={Paper}
+              sx={{ minWidth: 650, height: 350 }}
+            >
+              <Table
+                // sx={{ minWidth: 650, height: 200 }}
+                aria-label="simple table"
+              >
                 <TableHead sx={{ backgroundColor: "#1b2330" }}>
                   <TableRow sx={{ height: "60px" }}>
                     <TableCell

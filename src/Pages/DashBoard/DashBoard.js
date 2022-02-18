@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import InfoCard from "../../Components/InfoCard/InfoCard";
+
 import "./DashBoard.css";
 import { withStyles } from "@mui/styles";
 import UserForm from "../../Components/UserForm/UserForm";
-import Users from "../../Components/Users/Users";
+
 import { Typography, Grid } from "@mui/material";
 import DataCard from "../../Components/DataCard/DataCard";
 import AddIcon from "@mui/icons-material/Add";
-import PersonIcon from "@mui/icons-material/Person";
+
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
 import LocalActivityRoundedIcon from "@mui/icons-material/LocalActivityRounded";
 
@@ -32,11 +31,6 @@ const DashBoard = (props) => {
   const { classes } = props;
   return (
     <div className="dashboardContainer">
-      {/* <InfoCard
-        title="Dashboard"
-        description="Manage all your data"
-        bgImagePath="Images/pageTitleBanner.jpg"
-      /> */}
       <Grid container spacing={3} justifyContent="space-between" px={5} pt={3}>
         <Grid item xs={4}>
           <DataCard
